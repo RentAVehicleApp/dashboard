@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import axios from 'axios';
 import type {VehicleDashboardDetailsDto} from "../components/dto/VehicleDashboardDetailsDto.dto.ts";
 
-//const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface VehicleState {
     vehicles: VehicleDashboardDetailsDto[];
@@ -21,7 +21,7 @@ export const useVehicleStore = create<VehicleState>((set) => ({
         set({ loading: true, error: null });
 
         try {
-            const response = await axios.get(`https://device-service-parent-production.up.railway.app/v1/vehicles/list`);
+            const response = await axios.get(`${API_URL}/v1/vehicles/list`);
             set({ vehicles: response.data.content, loading: false });
         } catch (error: any) {
             set({ error: error.message, loading: false });
