@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@import "leaflet/dist/leaflet.css";
+
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9fafb;
+}
