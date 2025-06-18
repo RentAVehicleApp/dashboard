@@ -5,7 +5,7 @@ import { useVehicleStore } from "../store/vehicleStore";
 export default function TablePage() {
     const { vehicles, loading, error, fetchVehicles, page, totalPages } = useVehicleStore();
     const [currentPage, setCurrentPage] = useState(0);
-    const size = 5;
+    const size = 10;
 
     useEffect(() => {
         fetchVehicles(currentPage, size);
