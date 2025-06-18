@@ -1,21 +1,26 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { useVehicleStore } from "../store/vehicleStore";
 
 export default function TablePage() {
-    const { vehicles, loading, error, fetchVehicles } = useVehicleStore();
+    const { vehicles, loading, error, fetchVehicles, page, totalPages } = useVehicleStore();
+    const [currentPage, setCurrentPage] = useState(0);
+    const size = 5;
 
     useEffect(() => {
-        fetchVehicles();
-    }, [fetchVehicles]);
+        fetchVehicles(currentPage, size);
+    }, [currentPage]);
 
-    if (loading) {
-        return <div className="p-4 text-center text-lg font-semibold">Loading...</div>;
-    }
+    const nextPage = () => {
+        if (currentPage < totalPages - 1) setCurrentPage((p) => p + 1);
+    };
 
-    if (error) {
-        return <div className="p-4 text-center text-lg text-red-500">Error: {error}</div>;
-    }
+    const prevPage = () => {
+        if (currentPage > 0) setCurrentPage((p) => p - 1);
+    };
+
+    if (loading) return <div className="p-4 text-center text-lg font-semibold">Loading...</div>;
+    if (error) return <div className="p-4 text-center text-lg text-red-500">Error: {error}</div>;
 
     return (
         <div className="overflow-x-auto bg-gray-50 p-4">
@@ -61,6 +66,24 @@ export default function TablePage() {
                 ))}
                 </tbody>
             </table>
+
+            <div className="flex justify-between mt-4">
+                <button
+                    onClick={prevPage}
+                    disabled={currentPage === 0}
+                    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                >
+                    Previous
+                </button>
+                <span className="px-4 py-2">Page {page + 1} of {totalPages}</span>
+                <button
+                    onClick={nextPage}
+                    disabled={currentPage >= totalPages - 1}
+                    className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50"
+                >
+                    Next
+                </button>
+            </div>
         </div>
     );
 }
