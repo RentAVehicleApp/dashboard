@@ -2,7 +2,7 @@ export interface VehicleDashboardDetailsDto {
     id: number;
     registrationNumber: string;
     vehicleModel: 'MODEL1' | 'MODEL2' | 'MODEL3';
-    availibility: 'IN_USE' | 'UNDER_REPAIR' | 'DISCONNECTED';
+    availability: 'IN_USE' | 'UNDER_REPAIR' | 'DISCONNECTED';
     point: { x: number; y: number } | null;
     nodes: string;
     device: {

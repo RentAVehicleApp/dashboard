@@ -12,7 +12,7 @@ export default function CreateVehicleForm({ devices, onCreated }: Props) {
     const [registrationNumber, setRegistrationNumber] = useState('');
     const [vehicleModel, setVehicleModel] = useState<'MODEL1' | 'MODEL2' | 'MODEL3'>('MODEL1');
     const [deviceId, setDeviceId] = useState(0);
-    const [availibility, setAvailibility] = useState<'IN_USE' | 'UNDER_REPAIR' | 'DISCONNECTED'>('IN_USE');
+    const [availability, setAvailability] = useState<'IN_USE' | 'UNDER_REPAIR' | 'DISCONNECTED'>('IN_USE');
     const [nodes, setNodes] = useState('');
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -22,7 +22,7 @@ export default function CreateVehicleForm({ devices, onCreated }: Props) {
                 registrationNumber,
                 vehicleModel,
                 deviceId,
-                availibility,
+                availability,
                 point: null,
                 nodes,
                 id: 0
@@ -69,8 +69,8 @@ export default function CreateVehicleForm({ devices, onCreated }: Props) {
                     <option value="MODEL3">MODEL3</option>
                 </select>
                 <select
-                    value={availibility}
-                    onChange={(e) => setAvailibility(e.target.value as any)}
+                    value={availability}
+                    onChange={(e) => setAvailability(e.target.value as any)}
                     className="w-full border rounded px-3 py-2"
                 >
                     <option value="IN_USE">IN_USE</option>

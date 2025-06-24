@@ -43,12 +43,12 @@ export default function TablePage() {
                 {vehicles.map((vehicle) => (
                     <tr key={vehicle.registrationNumber} className="border-t hover:bg-gray-50">
                         <td className="px-4 py-2 text-blue-600">
-                            <Link to={`/vehicle/${vehicle.registrationNumber}`} className="hover:underline">
+                            <Link to={`/vehicle/${vehicle.id}`} className="hover:underline">
                                 {vehicle.registrationNumber}
                             </Link>
                         </td>
                         <td className="px-4 py-2">{vehicle.vehicleModel}</td>
-                        <td className="px-4 py-2">{vehicle.availibility}</td>
+                        <td className="px-4 py-2">{vehicle.availability}</td>
                         <td className="px-4 py-2">
                             {vehicle.point ? `${vehicle.point.x}, ${vehicle.point.y}` : 'No position'}
                         </td>
