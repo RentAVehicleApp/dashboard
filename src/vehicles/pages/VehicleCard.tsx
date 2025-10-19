@@ -1,13 +1,20 @@
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {vehicleApi} from "../../components/users/api/axios.ts";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 interface Point {
     x: number;
     y: number;
+}
+
+interface PointFromLatLonDto {
+    latitude: string;
+    longitude: string;
 }
 
 interface DeviceConfig {
@@ -32,6 +39,7 @@ interface Vehicle {
     point?: Point;
     nodes?: string;
     device?: Device;
+    pointFromLatLonDto?: PointFromLatLonDto;
 }
 
 export default function VehicleCard() {
@@ -69,7 +77,7 @@ export default function VehicleCard() {
                 return;
             }
             try {
-                const res = await axios.get(`${API_URL}/v1/vehicles/${id}`);
+                const res = await vehicleApi.get(`${API_URL}/v1/vehicles/${id}`);
                 const v: Vehicle = res.data;
                 setVehicle(v);
                 setBatteryStatus(v.batteryStatus ?? 80);
@@ -87,15 +95,17 @@ export default function VehicleCard() {
 
         async function fetchOptions() {
             try {
-                const [vehiclesRes, devicesRes, configsRes] = await Promise.all([
-                    axios.get(`${API_URL}/v1/vehicles/list?page=0&size=1000`),
-                    axios.get(`${API_URL}/v1/devices/list?page=0&size=1000`),
-                    axios.get(`${API_URL}/v1/deviceconfig/list?page=0&size=1000`)
+                const [freeDevicesRes, configsRes] = await Promise.all([
+                    vehicleApi.get(`${API_URL}/v1/devices/without-vehicle?page=0&size=1000&sort=id,asc`),
+                    vehicleApi.get(`${API_URL}/v1/deviceconfig/list?page=0&size=1000`)
                 ]);
-                const usedDeviceIds = vehiclesRes.data.content
-                    .filter((v: Vehicle) => v.device?.id && v.id !== Number(id))
-                    .map((v: Vehicle) => v.device!.id);
-                const freeDevices = devicesRes.data.content.filter((dev: Device) => !usedDeviceIds.includes(dev.id));
+
+                const freeDevices: Device[] = freeDevicesRes.data.content;
+
+                if (vehicle?.device && !freeDevices.find(d => d.id === vehicle.device!.id)) {
+                    freeDevices.push(vehicle.device);
+                }
+
                 setDeviceList(freeDevices);
                 setConfigList(configsRes.data.content);
             } catch (err) {
@@ -128,14 +138,14 @@ export default function VehicleCard() {
         console.log('Sending update to backend:', updateData);
 
         try {
-            await axios.put(`${API_URL}/v1/vehicles/${vehicle.id}`, updateData);
+            await vehicleApi.put(`${API_URL}/v1/vehicles/${vehicle.id}`, updateData);
             if (deviceId) {
-                await axios.put(`${API_URL}/v1/devices/${deviceId}`, deviceUpdateData);
+                await vehicleApi.put(`${API_URL}/v1/devices/${deviceId}`, deviceUpdateData);
             }
-            alert('Vehicle updated successfully');
+            toast.success('Vehicle updated successfully');
         } catch (err: any) {
             console.error('Error updating vehicle', err);
-            alert('Failed to update vehicle');
+            toast.error('Failed to update vehicle');
         }
     };
 
@@ -143,6 +153,10 @@ export default function VehicleCard() {
     if (!vehicle) return <div className="p-4">Loading...</div>;
 
     const location = vehicle.point ? `${vehicle.point.x}, ${vehicle.point.y}` : 'No position';
+    const latLon = vehicle.pointFromLatLonDto
+        ? `${vehicle.pointFromLatLonDto.latitude}, ${vehicle.pointFromLatLonDto.longitude}`
+        : 'No coordinates';
+
     const COLORS = [getBatteryColor(batteryStatus), '#e5e7eb'];
 
     function getBatteryColor(percent: number): string {
@@ -201,6 +215,7 @@ export default function VehicleCard() {
                             value={availability}
                             onChange={(e) => setAvailability(e.target.value)}
                         >
+                            <option value="AVAILABLE">AVAILABLE</option>
                             <option value="IN_USE">IN_USE</option>
                             <option value="UNDER_REPAIR">UNDER_REPAIR</option>
                             <option value="DISCONNECTED">DISCONNECTED</option>
@@ -266,6 +281,7 @@ export default function VehicleCard() {
                     </label>
 
                     <p><strong>Location:</strong> {location}</p>
+                    <p><strong>Coordinates:</strong> {latLon}</p>
                 </div>
             </div>
         </div>

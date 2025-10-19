@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import CreateDeviceForm from "../components/forms/CreateDeviceForm.tsx";
-import CreateConfigForm from "../components/forms/CreateConfigForm.tsx";
-import CreateVehicleForm from "../components/forms/CreateVehicleForm.tsx";
+import CreateDeviceForm from "../forms/CreateDeviceForm.tsx";
+import CreateConfigForm from "../forms/CreateConfigForm.tsx";
+import CreateVehicleForm from "../forms/CreateVehicleForm.tsx";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 

@@ -11,10 +11,16 @@ export const Sidebar = () => {
                     Map
                 </NavLink>
                 <NavLink to="/table" className={({ isActive }) => `${base} ${isActive ? active : ''}`}>
-                    Table
+                    Vehicles
                 </NavLink>
-                <NavLink to="/add" className={({ isActive }) => `${base} ${isActive ? active : ''}`}>
-                    Add
+                <NavLink to="/users" className={({ isActive }) => `${base} ${isActive ? active : ''}`}>
+                    Customers
+                </NavLink>
+                <NavLink to="/workers" className={({ isActive }) => `${base} ${isActive ? active : ''}`}>
+                    Workers
+                </NavLink>
+                <NavLink to="/tickets" className={({ isActive }) => `${base} ${isActive ? active : ''}`}>
+                    Tickets
                 </NavLink>
             </nav>
         </aside>

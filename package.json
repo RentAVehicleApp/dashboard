@@ -13,10 +13,12 @@
     "@tailwindcss/vite": "^4.1.8",
     "axios": "^1.10.0",
     "leaflet": "^1.9.4",
+    "qs": "^6.14.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-leaflet": "^5.0.0",
     "react-router": "^7.6.2",
+    "react-toastify": "^11.0.5",
     "recharts": "^2.15.3",
     "tailwindcss": "^4.1.8",
     "zustand": "^5.0.5"
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@eslint/js": "^9.25.0",
     "@types/leaflet": "^1.9.18",
+    "@types/qs": "^6.14.0",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitejs/plugin-react": "^4.4.1",
